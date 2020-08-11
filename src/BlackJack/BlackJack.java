@@ -78,7 +78,6 @@ public class BlackJack {
             if (!finish.equals("Y")) {
                 //最初から開始
                 Msg.startAgain();
-                continue;
 
             } else {
                 //Yと入力→終了
