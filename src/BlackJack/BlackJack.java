@@ -228,14 +228,10 @@ public class BlackJack {
 
 
             //同じ枚数：引き分け
-        } else if (playerCards.size() == dealerCards.size()) {
+        } else {
             System.out.println("引き分け");
             draw++;
             //同じ数：引き分け
-        } else if (playerPoint == dealerPoint) {
-            System.out.println("引き分け");
-            draw++;
-
         }
 
         //最終の点数

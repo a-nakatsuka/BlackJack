@@ -38,7 +38,7 @@ public class Card implements Comparable<Card> {
         int markIndex = getCardMarkNumber(cardIndex);
         //カードの番号部分を取得
         int cardNumber = getCardNumber(cardIndex);
-        String dispNumber = "";
+        String dispNumber;
         dispNumber = String.valueOf((cardNumber));
 
         //1:A 11:J 12:Q 13:K

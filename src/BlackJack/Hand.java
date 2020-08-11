@@ -43,7 +43,7 @@ public class Hand {
         boolean ace = false;
         for (int i = 0; i < _Cards.size(); i++) {
             //1枚目のカードで、かつAのとき
-            if (ace == false && _Cards.get(i).get_cardNumber() == 1) {
+            if (!ace && _Cards.get(i).get_cardNumber() == 1) {
                 //フラグを立てて加算しない
                 ace = true;
             } else {
@@ -56,7 +56,7 @@ public class Hand {
             }
         }
 
-        if (ace == true) {
+        if (ace) {
             //1枚目がA,2枚目もAだった時
             int sum1 = sum + 1;
             int sum11 = sum + 11;
@@ -79,13 +79,8 @@ public class Hand {
         }
         _point = sum;
 
-        if (_point < 22) {
-            _isBurst = false;
-        } else {
-            //バーストしてたらtrue
-            _isBurst = true;
-
-        }
+        //バーストしてたらtrue
+        _isBurst = _point >= 22;
 
 
     }
