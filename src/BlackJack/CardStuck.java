@@ -37,6 +37,7 @@ public class CardStuck {
             Card card = new Card(i);
             cards.add(card);
         }
+
     }
 
     /**

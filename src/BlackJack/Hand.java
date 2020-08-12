@@ -10,6 +10,8 @@ public class Hand {
     private int _point = 0;
     private boolean _isBurst = false;
 
+    private int BURST_NUMBER = 22;
+
     /**
      * コンストラクタ
      */
@@ -30,7 +32,9 @@ public class Hand {
      * バーストの判定
      */
     public boolean isBurst() {
+
         return _isBurst;
+
     }
 
     /**
@@ -62,12 +66,12 @@ public class Hand {
             int sum11 = sum + 11;
 
             //2枚目が1でバースト、11でバーストのとき
-            if (sum1 > 21 && sum11 > 21) {
+            if (sum1 > BURST_NUMBER && sum11 > BURST_NUMBER) {
                 //数が小さい方
                 sum = sum1;
 
                 //2枚目が1でバーストせず、11でバーストのとき
-            } else if (sum1 < 22 && sum11 > 21) {
+            } else if (sum1 <= BURST_NUMBER && sum11 > BURST_NUMBER) {
                 //1の方
                 sum = sum1;
 

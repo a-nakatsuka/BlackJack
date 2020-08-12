@@ -35,6 +35,7 @@ public class Msg {
 
 
     public static void totalJudgeMsg(int win,int lose,int draw) {
+        System.out.println();
         System.out.println("通算勝敗");
         System.out.println("勝ち：" + win + "回");
         System.out.println("負け：" + lose + "回");

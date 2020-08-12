@@ -3,12 +3,19 @@ package BlackJack;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collections;
 import java.util.List;
 
 public class BlackJack {
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     private final CardStuck cardStuck = new CardStuck();
+
+    //ディーラーのカードは17以上で判定される
+    private int DEALER_CARD = 17;
+
+    //ブラックジャック
+    private int BLACK_JACK = 21;
 
     /**
      * プレーヤーの手札
@@ -43,12 +50,19 @@ public class BlackJack {
             deliveryDealerCard();
 
             //テスト
-            /*playerCards.set(0, new Card(13));
+           /* playerCards.set(0, new Card(34));
             playerCards.set(1, new Card(35));
+            //playerCards.set(2, new Card(26));
+            //playerCards.set(3, new Card(50));
 
-            dealerCards.set(0, new Card(9));
-            dealerCards.set(1, new Card(22));*/
+            dealerCards.set(0, new Card(47));
+            dealerCards.set(1, new Card(48));*/
+            //dealerCards.set(2, new Card(38));
+            //dealerCards.set(3, new Card(51));
 
+            //カードをS1~S13,H1~H13,D1~D13,C1~C13の順で並び替える
+            sortPlayerCard();
+            sortDealerCard();
 
             //手持ちのカードを画面に表示する
             showPlayerCards();
@@ -63,7 +77,7 @@ public class BlackJack {
             }
 
             //ディーラーがカードを引く
-            dealersCardUpTo17();
+            dealersCardMin();
 
             //勝敗の表示
             showWinOrLose();
@@ -73,11 +87,14 @@ public class BlackJack {
 
             //終了するかの確認
             Msg.finishMsg();
+
             //入力の受付
             String finish = reader.readLine();
             if (!finish.equals("Y")) {
                 //最初から開始
                 Msg.startAgain();
+                //カード山の初期化
+                resetCard();
 
             } else {
                 //Yと入力→終了
@@ -87,6 +104,10 @@ public class BlackJack {
         }
     }
 
+    //カードの山を初期化
+    private void resetCard(){
+        cardStuck.createNewStack();
+    }
 
     /**
      * プレイヤーの手札にカードを2枚配る
@@ -100,6 +121,20 @@ public class BlackJack {
      */
     private void deliveryDealerCard() {
         dealerCards = cardStuck.takeCards(2);
+    }
+
+    /**
+     * プレイヤーのカードをS1~S13,H1~H13,D1~D13,C1~C13の順で並び替える
+     */
+    private void sortPlayerCard() {
+        Collections.sort(playerCards);
+    }
+
+    /**
+     * ディーラーのカードをS1~S13,H1~H13,D1~D13,C1~C13の順で並び替える
+     */
+    private void sortDealerCard() {
+        Collections.sort(dealerCards);
     }
 
     /**
@@ -120,7 +155,11 @@ public class BlackJack {
     private void showDealerCards() {
         System.out.print("ディーラーカード：");
         for (int i = 0; i < dealerCards.size(); i++) {
-            System.out.print(dealerCards.get(i).getDisplayString() + " ");
+            if (i == 1) {
+                System.out.print("* ");
+            } else {
+                System.out.print(dealerCards.get(i).getDisplayString() + " ");
+            }
         }
         System.out.println();
         System.out.println();
@@ -161,12 +200,12 @@ public class BlackJack {
     /**
      * ディーラーの手札が17以上になるまでカードを引く
      */
-    public void dealersCardUpTo17() {
+    public void dealersCardMin() {
         while (true) {
             Hand dealerHand = new Hand(dealerCards);
 
             //ディーラーがカードを引く(17以上になるまで)
-            if (dealerHand.getHandPoint() < 17) {
+            if (dealerHand.getHandPoint() < DEALER_CARD) {
                 //カードを1枚引く
                 Card card = cardStuck.takeCard();
                 //リストに追加
@@ -216,31 +255,38 @@ public class BlackJack {
             System.out.println("負け");
             lose++;
 
-            //枚数
-            //プレイヤーの方が枚数が少ない：プレイヤーの勝ち
-        } else if (playerCards.size() < dealerCards.size()) {
-            System.out.println("勝ち");
-            win++;
-            //ディーラーの方が枚数が少ない：ディーラーの勝ち
-        } else if (playerCards.size() > dealerCards.size()) {
-            System.out.println("負け");
-            lose++;
-
-
-            //同じ枚数：引き分け
-        } else {
+            //ブラックジャックではなく、同じ数字で同じ枚数：引き分け
+        } else if (playerPoint != BLACK_JACK && playerCards.size() == dealerCards.size()){
             System.out.println("引き分け");
             draw++;
-            //同じ数：引き分け
         }
 
-        //最終の点数
-        System.out.println("プレイヤー：" + playerPoint);
-        System.out.println("ディーラー：" + dealerPoint);
-        System.out.println();
+        //両方がブラックジャックのときは枚数で判断
+        //プレイヤーの方が枚数が少ない：プレイヤーの勝ち
+        if (playerPoint == BLACK_JACK && dealerPoint == BLACK_JACK) {
+            if (playerCards.size() < dealerCards.size()) {
+                System.out.println("勝ち");
+                win++;
+                //ディーラーの方が枚数が少ない：ディーラーの勝ち
+            } else if (playerCards.size() > dealerCards.size()) {
+                System.out.println("負け");
+                lose++;
+            }
+        }
+
+            //最終の点数
+            System.out.print("プレイヤー：" + playerPoint + " ");
+            if (playerPoint > 21) {
+                System.out.println("バースト");
+            }
+            System.out.println();
+
+            System.out.print("ディーラー：" + dealerPoint + " ");
+            if (dealerPoint > 21) {
+                System.out.println("バースト");
+            }
+            System.out.println();
+
+
     }
-
-
 }
-
-

@@ -45,7 +45,7 @@ public class Card implements Comparable<Card> {
         //他の数字は型を変換してそのまま出力
         if (cardNumber == 1) {
             dispNumber = "A";
-        } else if (cardNumber == 2 || cardNumber == 3 || cardNumber == 4 || cardNumber == 5 || cardNumber == 6 || cardNumber == 7 || cardNumber == 8 || cardNumber == 9 || cardNumber == 10) {
+        } else if (cardNumber >= 2 && cardNumber <= 10) {
             dispNumber = String.valueOf(cardNumber);
         } else if (cardNumber == 11) {
             dispNumber = "J";
