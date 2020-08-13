@@ -107,6 +107,7 @@ public class BlackJack {
     //カードの山を初期化
     private void resetCard(){
         cardStuck.createNewStack();
+
     }
 
     /**
